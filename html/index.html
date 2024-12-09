@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+            align-items: center;    /* 수직 가운데 정렬 */
+            font-family: Arial, sans-serif;
+            animation: gra 10s infinite alternate ease-in-out ; /* 애니메이션 적용 */
+            background-image: url("일러스트.png");
+            background-size: 200%;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            font-size: 100px;
+            color: rgb(0, 0, 0);
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            white-space: nowrap; /* 한 줄에 표시 */
+            overflow: hidden;
+            border-right: 3px solid rgb(0, 0, 0); /* 커서 효과 */
+            padding-right: 5px;
+            width: max-content; /* 글자가 전부 쓰여지는 것을 반영 */
+            height: 128px; /* 고정된 높이로 버튼 위치 유지 */
+        }
+
+        button:hover {
+            transition: all 0.5s linear;
+            transform: rotateX(360deg);
+            animation: fade 0.6s infinite alternate ease;
+            height: 90px;
+        }
+
+        button {
+            border: 3px solid azure;
+            background-color: azure;
+            opacity: 0.8px;
+            border-radius: 100px;
+            color: blue;
+            font-weight: 700;
+            transition: all 0.3s linear;
+            margin-top: 20px; /* 버튼 사이의 간격을 두기 위해 추가 */
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 1;
+                transform: rotateX(0deg);
+            }
+            to {
+                opacity: 0.7;
+                transform: rotateX(360deg);
+            }
+        }
+
+        @keyframes gra {
+            0% {
+                background-color: #f0e8ff;
+            }
+            50% {
+                background-color: #351eff;
+            }
+            100% {
+                background-color: rgb(183, 255, 38);
+            }
+        }
+
+        div {
+            margin-top: 5%;
+            text-align: center;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        img{
+            position: fixed; /* 화면 고정 */
+            bottom: 20px;    /* 화면 하단에서 20px 떨어진 위치 */
+            right: -200px;     /* 화면 우측에서 20px 떨어진 위치 */
+            bottom: -130px;
+            width: 50%;    /* 이미지 크기 */
+            height: auto;    /* 이미지 비율 유지 */
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1 id="typingText">Welcome to Our Website</h1>
+        <button onclick="location.href='login.html'">로그인</button>
+        <button onclick="location.href='signup.html'">회원가입</button>
+    </div>
+    <script>
+        const textElement = document.getElementById('typingText');
+        const phrases = ["안녕하세요.", "Hello.", "여러분,", "Welcome!", "식사는 하셨나요:)","저와 함께","오늘의 메뉴를 정해봐요!"];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let currentPhrase = "";
+        let deleting = false;
+
+        function typeWriter() {
+            if (deleting) {
+                currentPhrase = phrases[phraseIndex].substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                currentPhrase = phrases[phraseIndex].substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            textElement.textContent = currentPhrase;
+
+            if (!deleting && charIndex === phrases[phraseIndex].length) {
+                setTimeout(() => {
+                    deleting = true;
+                    typeWriter();
+                }, 1000);
+            } else if (deleting && charIndex === 0) {
+                deleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                setTimeout(typeWriter, 500);
+            } else {
+                setTimeout(typeWriter, deleting ? 50 : 150);
+            }
+        }
+
+        typeWriter(); // 애니메이션 시작
+    </script>
+</body>
+</html>

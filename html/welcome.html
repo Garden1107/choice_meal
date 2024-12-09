@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+            align-items: center;    /* 수직 가운데 정렬 */
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center; /* 텍스트를 가운데 정렬 */
+            position: relative;
+            overflow: hidden; /* 떨어지는 별이 화면 밖으로 나가지 않도록 */
+        }
+
+        h1 {
+            font-size: 40px;
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-bottom: 20px;
+            opacity: 1;
+            transition: opacity 2s ease-out;
+        }
+
+        p {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 30px;
+            opacity: 1;
+            transition: opacity 2s ease-out;
+        }
+
+        button {
+            background-color: #0011ff;
+            color: white;
+            padding: 15px 32px;
+            font-size: 16px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px; /* 버튼의 최대 너비 */
+            margin-top: 10px;
+            display: block; /* 버튼을 블록 요소로 만들어 중앙 정렬 */
+            margin-left: auto; /* 왼쪽 마진 자동 */
+            margin-right: auto; /* 오른쪽 마진 자동 */
+        }
+
+        button:hover {
+            background-color: #7700ff;
+            transition: background-color 0.3s ease;
+        }
+
+        img {
+            position: fixed; /* 화면 고정 */
+            bottom: 20px;
+            right: -200px;
+            width: 50%;
+            height: auto;
+        }
+
+        .star {
+            position: fixed;
+            font-size: 30px;
+            animation: fall 5s infinite ease-in-out;
+            opacity: 1;
+            z-index: 1000;
+        }
+
+        /* 별이 떨어지면서 회전하는 애니메이션 */
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotateY(0deg); /* 화면 위에서 시작하고 회전 시작 */
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(100vh) rotateY(360deg); /* 화면 아래로 떨어지며 회전 */
+                opacity: 1; /* 사라지지 않음 */
+            }
+        }
+
+        #mealChoice {
+            margin-top: 30px;
+            font-size: 20px;
+            color: #333;
+            display: none; /* 처음에는 숨김 */
+            opacity: 0;
+            transition: opacity 2s ease-in-out; /* 서서히 나타나도록 설정 */
+            text-align: center;
+        }
+
+        .meal-option {
+            margin: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        .meal-option:hover {
+            background-color: #7b29ff;
+            color: white;
+        }
+
+        /* 서서히 나타나는 애니메이션 */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        #recommendedMeal {
+            font-size: 24px;
+            color: #333;
+            margin-top: 20px;
+            display: none; /* 추천 메뉴는 처음에 숨김 */
+            opacity: 0;
+            transition: opacity 2s ease-in-out; /* 서서히 나타나도록 설정 */
+        }
+
+        #mainButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            padding: 10px 20px;
+            background-color: #0011ff;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            display: block; /* 처음부터 보이게 */
+        }
+
+        #mainButton:hover {
+            background-color: #7700ff;
+        }
+        
+    </style>
+</head>
+<body>
+    <div>
+        <h1>환영합니다!</h1>
+        <p>우리 사이트에 오신 것을 환영합니다.<br> 함께 오늘의 식사메뉴를 찾아봐요😊</p>
+        <div id="mealChoice">
+            <p><strong>Q. 어떤 종류의 음식을 먹고 싶으신가요?</strong></p>
+            <div class="meal-option" onclick="recommendMeal('양식')">양식</div>
+            <div class="meal-option" onclick="recommendMeal('중식')">중식</div>
+            <div class="meal-option" onclick="recommendMeal('한식')">한식</div>
+            <div class="meal-option" onclick="recommendMeal('일식')">일식</div>
+        </div>
+        <div id="recommendedMeal"></div>
+        <button id="mainButton" onclick="location.href='index.html'">메인으로 돌아가기</button>
+    </div>
+
+    <script>
+        function generateStars() {
+            setInterval(() => {
+                // 🌟 아이콘 생성
+                const star = document.createElement("div");
+                star.classList.add("star");
+                star.innerText = "🌟";
+    
+                // 랜덤한 위치에 별을 배치
+                const randomX = Math.random() * window.innerWidth;
+                star.style.left = `${randomX}px`;
+                star.style.top = `-30px`;  // 별이 화면의 위에서 떨어지도록 설정
+    
+                // 별을 body에 추가
+                document.body.appendChild(star);
+    
+                // 5초 후 별을 제거
+                setTimeout(() => {
+                    star.remove();
+                }, 10000); // 5초 후에 별을 삭제
+            }, 300); // 0.3초마다 별 생성
+        }
+    
+        // 환영 문구가 사라지고 메뉴 추천 표시
+        setTimeout(() => {
+            document.querySelector("h1").style.opacity = 0;
+            document.querySelector("p").style.opacity = 0;
+    
+            setTimeout(() => {
+                const mealChoiceDiv = document.getElementById("mealChoice");
+                mealChoiceDiv.style.display = "block";
+                mealChoiceDiv.style.opacity = 1; // 메뉴 선택이 서서히 보이게 설정
+                const mealOptions = document.querySelectorAll('.meal-option');
+                mealOptions.forEach((option, index) => {
+                    setTimeout(() => {
+                        option.style.opacity = 1; // 각 선택지가 서서히 나타나도록
+                    }, index * 500); // 각 선택지가 0.5초 간격으로 보이게 설정
+                });
+            }, 2000); // 2초 후 메뉴 선택 질문 표시
+        }, 3000); // 3초 후 환영 문구가 사라지기 시작
+    
+        // 메뉴 추천 함수
+        function recommendMeal(choice) {
+            const mealChoiceDiv = document.getElementById("mealChoice");
+            mealChoiceDiv.style.display = "none";  // 메뉴 선택지를 숨깁니다.
+    
+            const recommendedMeal = document.getElementById("recommendedMeal");
+            recommendedMeal.style.display = "block";
+            recommendedMeal.innerHTML = ''; // 이전 내용을 지웁니다.
+    
+            let meal;
+            switch (choice) {
+                case '양식':
+                    meal = "스파게티, 피자, 리조또";
+                    break;
+                case '중식':
+                    meal = "짬뽕, 볶음밥, 탕수육";
+                    break;
+                case '한식':
+                    meal = "비빔밥, 김치찌개, 불고기";
+                    break;
+                case '일식':
+                    meal = "초밥, 라멘, 돈까스";
+                    break;
+                default:
+                    meal = "선택한 메뉴가 없습니다.";
+            }
+    
+            // 추천 메뉴를 서서히 보이게 하기
+            recommendedMeal.style.opacity = 0;
+            setTimeout(() => {
+                recommendedMeal.innerHTML = `<strong>${meal}을/를 먹는 것을 추천합니다:)<br>맛있는 식사하세요!🥰</strong>`;
+                recommendedMeal.style.opacity = 1; // 서서히 나타나도록 설정
+            }, 500); // 0.5초 후에 메뉴 텍스트 보이기
+    
+            // 6초 후에 메인 버튼 표시
+            setTimeout(() => {
+                document.getElementById("mainButton").style.display = "block"; // 버튼 보이기
+            }, 6000); // 6초 후 메인으로 돌아가기 버튼을 표시
+        }
+    
+        // 스타 생성 함수 호출
+        generateStars();
+    </script>       
+</body>
+</html>
